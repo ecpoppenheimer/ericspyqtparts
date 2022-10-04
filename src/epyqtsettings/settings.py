@@ -5,8 +5,14 @@ class Settings:
     """
     A simple settings data class, which is basically just a wrapper for a dict that exposes its keys as attributes
     """
-    def __init__(self, **kwargs):
+    def __init__(self, settings_path=None, **kwargs):
         object.__setattr__(self, "dict", dict(**kwargs))
+        self.settings_path = settings_path
+        if self.settings_path is not None:
+            try:
+                self.load(self.settings_path)
+            except Exception:
+                pass
 
     def keys(self):
         return self.dict.keys()
@@ -53,7 +59,11 @@ class Settings:
                 else:
                     self.dict[key] = value
 
-    def save(self, filename):
+    def save(self, filename=None):
+        if filename is None:
+            filename = self.settings_path
+        if filename is None:
+            raise ValueError("Settings file path was never provided.")
         with open(filename, "wb") as outFile:
             pickle.dump(self.dict, outFile)
 
@@ -61,8 +71,3 @@ class Settings:
         for key in self.keys():
             if type(self.dict[key]) is dict:
                 self.dict[key] = Settings(**self.dict[key])
-
-
-def save(d, filename):
-    with open(filename, "wb") as outFile:
-        pickle.dump(d, outFile)

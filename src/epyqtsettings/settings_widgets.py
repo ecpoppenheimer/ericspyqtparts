@@ -38,6 +38,9 @@ class SettingsEntryBox(qtw.QWidget):
             except TypeError:
                 self.edit_box.editingFinished.connect(callback)
 
+    def set_value(self, val):
+        self.edit_box.setText(str(val))
+
 
 class SettingsRangeBox(qtw.QWidget):
     def __init__(self, settings, label, low_key, high_key, value_type, validator=None, callback=None):
@@ -289,22 +292,28 @@ class SettingsCheckBox(qtw.QWidget):
         self.label = qtw.QLabel(label)
         layout.addWidget(self.label)
 
-        check_box = qtw.QCheckBox()
-        layout.addWidget(check_box)
-        check_box.setCheckState(settings.dict[key])
-        check_box.setTristate(False)
+        self._check_box = qtw.QCheckBox()
+        layout.addWidget(self._check_box)
+        self._check_box.setCheckState(settings.dict[key])
+        self._check_box.setTristate(False)
 
         def set_setting(new_state):
             settings.dict[key] = bool(new_state)
 
-        check_box.stateChanged.connect(set_setting)
+        self._check_box.stateChanged.connect(set_setting)
 
         if callback is not None:
             try:
                 for each in callback:
-                    check_box.stateChanged.connect(each)
+                    self._check_box.stateChanged.connect(each)
             except TypeError:
-                check_box.stateChanged.connect(callback)
+                self._check_box.stateChanged.connect(callback)
+
+    def set_value(self, val):
+        if val:
+            self._check_box.setCheckState(2)
+        else:
+            self._check_box.setCheckState(0)
 
 
 class ColorEntryButton(qtw.QPushButton):
