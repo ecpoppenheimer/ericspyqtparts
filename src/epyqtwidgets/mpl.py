@@ -2,9 +2,8 @@ import numpy as np
 import PyQt5.QtWidgets as qtw
 
 from matplotlib.backends.backend_qt5agg import (
-    FigureCanvas, NavigationToolbar2QT as NavigationToolbar
+    FigureCanvasQTAgg as FigureCanvas, NavigationToolbar2QT as NavigationToolbar
 )
-from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
 
@@ -52,22 +51,11 @@ class MPLWidget(qtw.QWidget):
     def __init__(
             self,
             name=None,
-            alignment=None,
-            fig_size=(2.5, 2.5),
             blank=False,
-            *args,
-            **kwargs
     ):
-        super().__init__(*args, **kwargs)
-
-        self.fig = Figure(figsize=fig_size)
+        super().__init__()
+        self.fig, self.ax = plt.subplots(constrained_layout=True)
         self.fig_canvas = FigureCanvas(self.fig)
-        if alignment is None:
-            if blank:
-                alignment = (0.0, 0.0, 1.0, 1.0)
-            else:
-                alignment = (.1, .1, .898, .898)
-        self.ax = self.fig.add_axes(alignment)
         if blank:
             self.ax.set_frame_on(False)
             self.ax.axes.get_xaxis().set_visible(False)
