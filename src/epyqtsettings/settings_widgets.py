@@ -30,7 +30,16 @@ class SettingsEntryBox(qtw.QWidget):
             value = value_type(self.edit_box.text())
             settings.dict[key] = value
 
+        def changed_calback():
+            if self.edit_box.validator() is not None:
+                if self.edit_box.validator().validate(self.edit_box.text(), 0)[0] == qtg.QValidator.Acceptable:
+                    self.edit_box.setStyleSheet("QLineEdit { background-color: white}")
+                else:
+                    self.edit_box.setStyleSheet("QLineEdit { background-color: pink}")
+
         self.edit_box.editingFinished.connect(edit_callback)
+        if validator:
+            self.edit_box.textChanged.connect(changed_calback)
         if callback is not None:
             try:
                 for each in callback:
