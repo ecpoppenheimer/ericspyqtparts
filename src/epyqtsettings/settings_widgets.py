@@ -14,11 +14,11 @@ class SettingsEntryBox(qtw.QWidget):
         self.setLayout(layout)
 
         if label is None:
-            label = qtw.QLabel(str(key).replace("_", " "))
+            self.label = qtw.QLabel(str(key).replace("_", " "))
         else:
-            label = qtw.QLabel(str(label))
-        label.setSizePolicy(qtw.QSizePolicy.Minimum, qtw.QSizePolicy.Minimum)
-        layout.addWidget(label)
+            self.label = qtw.QLabel(str(label))
+        self.label.setSizePolicy(qtw.QSizePolicy.Minimum, qtw.QSizePolicy.Minimum)
+        layout.addWidget(self.label)
 
         self.edit_box = qtw.QLineEdit()
         layout.addWidget(self.edit_box)
@@ -64,9 +64,9 @@ class SettingsRangeBox(qtw.QWidget):
         self.callback = callback
 
         if label != "":
-            label = qtw.QLabel(label)
-            label.setSizePolicy(qtw.QSizePolicy.Minimum, qtw.QSizePolicy.Minimum)
-            layout.addWidget(label)
+            self.label = qtw.QLabel(label)
+            self.label.setSizePolicy(qtw.QSizePolicy.Minimum, qtw.QSizePolicy.Minimum)
+            layout.addWidget(self.label)
 
         self.low_entry = qtw.QLineEdit()
         layout.addWidget(self.low_entry)
@@ -225,7 +225,8 @@ class SettingsComboBox(qtw.QWidget):
         layout = qtw.QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
-        layout.addWidget(qtw.QLabel(label))
+        self.label = qtw.QLabel(label)
+        layout.addWidget(self.label)
 
         selector = qtw.QComboBox()
         layout.addWidget(selector)
@@ -253,7 +254,8 @@ class SettingsVectorBox(qtw.QWidget):
         layout = qtw.QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
-        layout.addWidget(qtw.QLabel(label))
+        self.label = qtw.QLabel(label)
+        layout.addWidget(self.label)
         self.entries = []
         for i in range(3):
             initial = self.settings.dict[settings_key][i]
